@@ -1,1 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
+html
+  body
+    font-family: "Quicksand", sans-serif
+    font-optical-sizing: auto
+    font-weight: 400
+    font-style: normal
+    background: #EBF2FC
+    color: #000000
+    font-size: 14px
+    line-height: 16px
+    min-width: 360px
+    text-align: left
+
+    .main-container
+      .navbar
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        background: #06367A
+        width: 60px
+        height: calc(100vh - 16px)
+        position: fixed
+        border-radius: 14px
+        align-items: center
+        opacity: 1
+        box-shadow: rgb(2 2 2 / 31%) 7px 5px 6px
+        border: 0px
+        color: #fff
+
+        span
+          cursor: pointer
+
+        .user-wrapper
+          padding: 70px 0 0
+
+        .action-wrapper
+          .action
+            padding: 0 0 24px
+
+      .content
+        display: flex
+        justify-content: center
+        align-items: center
+        height: calc(100vh - 16px)
+
+        .card
+          height: 440px
+          width: 360px
+          margin: 0 auto
+          background: #fff
+          box-shadow: rgba(2, 2, 2, 0.31) 0px 1px 14px
+          border-radius: 10px
