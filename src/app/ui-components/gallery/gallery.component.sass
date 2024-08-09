@@ -1,0 +1,38 @@
+.image-container
+  height: calc(100vh - 16px)
+  width: calc(100vw - 85px)
+  position: absolute
+  overflow: hidden
+  overflow-y: auto
+  left: 80px
+
+  &.custom-scrollbar
+    scrollbar-width: thin
+    transition: scrollbar-color .3s
+    scrollbar-color: transparent transparent
+
+    &:hover
+      scrollbar-color: #ababab transparent
+
+.liner
+  display: flex
+  text-align: left
+  align-items: flex-start
+
+  &:after
+    content: ''
+    flex-grow: 1
+    height: 1px
+    background: #c9c0bf
+    min-width: 20px
+    margin: auto
+
+  &:after
+    margin-left: 10px
+
+.thumbnail-list
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  list-style: none
+  gap: 8px
