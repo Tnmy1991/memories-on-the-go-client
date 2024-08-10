@@ -5,9 +5,11 @@ import {
   ImageViewerComponent,
   CreateAccountComponent,
   ActionSidebarComponent,
+  ExtendedFieldComponent,
 } from './ui-components';
 import { AuthorizeService } from './services';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -19,21 +21,41 @@ import { Component, OnInit } from '@angular/core';
     ImageViewerComponent,
     CreateAccountComponent,
     ActionSidebarComponent,
+    ExtendedFieldComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public isLoggedIn = false;
   public isLoginVisible = false;
+  public isSignupVisible = false;
+
+  private readonly unsubscribe$: Subject<void> = new Subject();
 
   constructor(private _authorize: AuthorizeService) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = this._authorize.isAuthenticated();
+    this._authorize
+      .isAuthenticated()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.isLoggedIn = response;
+      });
   }
 
   toggleLogin(): void {
+    this.isSignupVisible = false;
     this.isLoginVisible = !this.isLoginVisible;
+  }
+
+  toggleCreateAccount(): void {
+    this.isLoginVisible = false;
+    this.isSignupVisible = !this.isSignupVisible;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

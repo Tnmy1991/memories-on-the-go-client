@@ -1,0 +1,18 @@
+<div class="extended-field">
+  @if (label) {
+  <label for="{{ fieldName }}">
+    @if (isRequired) {
+    <em>*</em>
+    }
+    {{ label }}
+  </label>
+  }
+  <div class="field-wrapper">
+    <ng-content></ng-content>
+  </div>
+  @if(showError) {
+  <div class="error-wrapper">
+    <p class="p2">{{ error$ | async }}</p>
+  </div>
+  }
+</div>

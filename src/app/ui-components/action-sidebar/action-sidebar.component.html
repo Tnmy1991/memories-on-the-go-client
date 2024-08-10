@@ -1,13 +1,17 @@
 <div class="navbar">
   <div class="user-wrapper">
-    <span class="material-symbols-outlined">badge</span>
+    <button type="button" class="action-button">
+      <span class="material-symbols-outlined">badge</span>
+    </button>
   </div>
   <div class="action-wrapper">
-    <div class="action">
+    <!-- <div class="action">
       <span class="material-symbols-outlined">settings</span>
-    </div>
+    </div> -->
     <div class="action">
-      <span class="material-symbols-outlined">logout</span>
+      <button type="button" class="action-button" (click)="logout()">
+        <span class="material-symbols-outlined">logout</span>
+      </button>
     </div>
   </div>
 </div>

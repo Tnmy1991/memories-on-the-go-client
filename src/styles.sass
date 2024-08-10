@@ -38,6 +38,13 @@ body
   line-height: 16px
   font-weight: 400
 
+.p2
+  color: #777070
+  font-size: 12px
+  margin: 4px 0 4px
+  line-height: 14px
+  font-weight: 300
+
 .button
   z-index: 0
   color: #fff
@@ -100,6 +107,9 @@ body
   height: 320px
   background: url(#{$assetPath}/banner.webp) no-repeat
   background-size: 480px 320px
+
+.logo
+  margin: 0 auto
   
 .container
   position: absolute
@@ -110,35 +120,6 @@ body
   flex-direction: column
   justify-content: center
   align-items: center
-
-.input-group
-  position: relative
-  display: flex
-  flex-wrap: wrap
-  align-items: stretch
-  margin-bottom: 10px
-
-  .input-group-button
-    position: absolute
-    padding: 2px 4px 2px
-    font-size: 14px
-    font-weight: 400
-    line-height: 16px
-    color: #212529
-    white-space: nowrap
-    background-color: transparent
-    border: 1px solid #dee2e6
-    border-radius: 50%
-    cursor: pointer
-    z-index: 1
-    width: 30px
-    height: 30px
-    right: 4px
-    top: 6px
-
-    &:hover,
-    &:focus
-      border-color: #86b7fe
 
 .form-control
   display: block
@@ -168,6 +149,10 @@ body
     outline: 0
     border: 1px solid #86b7fe
 
-  
+  &.ng-dirty
+    &.ng-invalid
+      border-color: #e10000
 
-          
+    &.ng-valid
+      border-color: #14b900
+         

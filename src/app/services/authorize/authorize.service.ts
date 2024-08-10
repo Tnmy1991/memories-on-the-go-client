@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,7 @@ export class AuthorizeService {
   }
 
   getBearerToken(): string {
-    const token = sessionStorage.getItem(this.KEY) ?? '';
-    return this.isAuthenticated() ? token : '';
+    return sessionStorage.getItem(this.KEY) ?? '';
   }
 
   getDecodedToken(): { name: string; user_id: string } {
@@ -25,27 +25,28 @@ export class AuthorizeService {
     );
   }
 
-  isAuthenticated(): boolean {
+  isAuthenticated(): Observable<boolean> {
     const bearerToken = sessionStorage.getItem(this.KEY);
-    const isActive = !this._jwtHelper.isTokenExpired(bearerToken);
-    return isActive;
+    return of(!this._jwtHelper.isTokenExpired(bearerToken));
+  }
+
+  logout(): Observable<boolean> {
+    try {
+      sessionStorage.removeItem(this.KEY);
+      return of(true);
+    } catch (e) {
+      console.error(e);
+      return of(false);
+    }
   }
 
   getIdentity(): string {
-    if (this.isAuthenticated()) {
-      const decoded = this.getDecodedToken();
-      return decoded.user_id;
-    }
-
-    return '';
+    const decoded = this.getDecodedToken();
+    return decoded.user_id;
   }
 
   getName(): string {
-    if (this.isAuthenticated()) {
-      const decoded = this.getDecodedToken();
-      return decoded.name;
-    }
-
-    return '';
+    const decoded = this.getDecodedToken();
+    return decoded.name;
   }
 }

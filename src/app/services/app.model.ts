@@ -21,3 +21,14 @@ export interface LoginResponse {
   displayName: string;
   message: string;
 }
+
+export interface ImageObject {
+  user_id: string;
+  thumbnail_image: string;
+  s3_key_thumbnail: string;
+  s3_key: string;
+  original_image: string;
+  image_id: string;
+  filename: string;
+  created_at: string;
+}

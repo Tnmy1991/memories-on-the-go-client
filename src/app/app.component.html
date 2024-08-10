@@ -11,6 +11,18 @@
       <div class="container">
         @if (isLoginVisible) {
         <app-login></app-login>
+        <div class="action-container">
+          <a href="javascript:void(0)" (click)="toggleCreateAccount()"
+            >Need an account?</a
+          >
+        </div>
+        } @else if (isSignupVisible) {
+        <app-create-account></app-create-account>
+        <div class="action-container">
+          <a href="javascript:void(0)" (click)="toggleLogin()"
+            >Already have an account?</a
+          >
+        </div>
         } @else {
         <img
           class="logo"

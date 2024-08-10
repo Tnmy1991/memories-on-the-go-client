@@ -1,25 +1,47 @@
 <form [formGroup]="loginForm">
   <div class="login-container">
     <h1 class="title">Log In</h1>
-    <input
-      type="text"
-      class="form-control"
-      formControlName="username"
-      placeholder="Username"
-    />
-    <input
-      type="password"
-      class="form-control"
-      formControlName="password"
-      placeholder="Password"
-    />
+    <app-extended-field
+      fieldName="username"
+      [errors]="{
+        required: 'Username is required',
+        invalidData: 'Invalid Username provided.',
+        minlength: 'Username at least 6 character long.'
+      }"
+    >
+      <input
+        type="text"
+        class="form-control"
+        formControlName="username"
+        placeholder="Username"
+      />
+    </app-extended-field>
+    <app-extended-field
+      fieldName="password"
+      [errors]="{
+        required: 'Password is required',
+        invalidData: 'Invalid Password provided.',
+        minlength: 'Password at least 6 character long.'
+      }"
+    >
+      <input
+        type="password"
+        class="form-control"
+        formControlName="password"
+        placeholder="Password"
+      />
+    </app-extended-field>
     <button
       type="submit"
       class="button space-mid"
       (click)="requestLogin()"
-      [disabled]="loginForm.invalid"
+      [disabled]="loginForm.invalid || isLogging"
     >
-      Log In
+      @if(isLogging) {
+      <span>Logging In</span>
+      } @else {
+      <span>Log In</span>
+      }
     </button>
   </div>
 </form>

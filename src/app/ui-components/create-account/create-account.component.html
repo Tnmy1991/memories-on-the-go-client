@@ -1,1 +1,99 @@
-<p>create-account works!</p>
+<form [formGroup]="createAccoutnForm">
+  <div class="signup-container">
+    <img
+      class="logo"
+      width="124px"
+      src="logo-compact.png"
+      alt="Welcome! Memories On The Go"
+    />
+    <h1 class="title">Create an Account</h1>
+    <app-extended-field
+      fieldName="name"
+      [errors]="{
+        required: 'Full Name is required',
+        minlength: 'Username at least 6 character long.'
+      }"
+    >
+      <input
+        type="text"
+        class="form-control"
+        formControlName="name"
+        placeholder="Full Name"
+      />
+    </app-extended-field>
+    <app-extended-field
+      fieldName="phone_number"
+      [errors]="{
+        required: 'Phone Number is required',
+        phonenumberExists: 'Phone Number already in use.',
+        pattern: 'Phone Number contain invalid character.'
+      }"
+    >
+      <input
+        type="text"
+        class="form-control"
+        formControlName="phone_number"
+        placeholder="Phone Number"
+      />
+    </app-extended-field>
+    <app-extended-field
+      fieldName="username"
+      [errors]="{
+        required: 'Username is required',
+        usernameExists: 'Username already in use.',
+        minlength: 'Username at least 6 character long.'
+      }"
+    >
+      <input
+        type="text"
+        autocomplete="new-username"
+        class="form-control"
+        formControlName="username"
+        placeholder="Username"
+      />
+    </app-extended-field>
+    <app-extended-field
+      fieldName="password"
+      [errors]="{
+        required: 'Password is required',
+        minlength: 'Password at least 6 character long.',
+        pattern: 'Only uppercase, lowercase and digits are allowed.'
+      }"
+    >
+      <input
+        type="password"
+        class="form-control"
+        autocomplete="new-password"
+        formControlName="password"
+        placeholder="Password"
+      />
+    </app-extended-field>
+    <app-extended-field
+      fieldName="confirm_password"
+      [errors]="{
+        required: 'Confirm Password is required',
+        minlength: 'Confirm Password at least 6 character long.',
+        PasswordNotMatch: 'Entered passowrd not matched.'
+      }"
+    >
+      <input
+        type="password"
+        class="form-control"
+        formControlName="confirm_password"
+        placeholder="Confirm Password"
+      />
+    </app-extended-field>
+    <button
+      type="submit"
+      class="button space-mid"
+      (click)="createAccount()"
+      [disabled]="createAccoutnForm.invalid || isReqesting"
+    >
+      @if(isReqesting) {
+      <span>Creating Account</span>
+      } @else {
+      <span>Create Account</span>
+      }
+    </button>
+  </div>
+</form>

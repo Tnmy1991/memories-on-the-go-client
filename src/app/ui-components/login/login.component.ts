@@ -1,24 +1,29 @@
-import { Component, OnInit } from '@angular/core';
 import {
-  FormControl,
   FormGroup,
-  ReactiveFormsModule,
   Validators,
+  FormControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { debounceTime } from 'rxjs';
-import { UsersService } from '../../services';
+import { catchError } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { AuthorizeService, UsersService } from '../../services';
+import { ExtendedFieldComponent } from '../extended-field/extended-field.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ExtendedFieldComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
 })
 export class LoginComponent implements OnInit {
+  isLogging = false;
   loginForm!: FormGroup;
 
-  constructor(private _userService: UsersService) {}
+  constructor(
+    private _userService: UsersService,
+    private _authorizeService: AuthorizeService
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -35,9 +40,23 @@ export class LoginComponent implements OnInit {
 
   requestLogin(): void {
     if (this.loginForm.valid) {
-      this._userService.login(this.loginForm.value).subscribe((response) => {
-        console.log(response);
-      });
+      this.isLogging = true;
+      this._userService
+        .login(this.loginForm.value)
+        .pipe(
+          catchError((error) => {
+            this.loginForm
+              .get(error.error.field)
+              ?.setErrors({ invalidData: true });
+            this.isLogging = false;
+
+            throw error;
+          })
+        )
+        .subscribe((response) => {
+          this._authorizeService.setBearerToken(response.access_token);
+          location.reload();
+        });
     }
   }
 }
