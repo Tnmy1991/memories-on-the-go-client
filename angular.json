@@ -86,6 +86,9 @@
             "styles": ["src/styles.sass"],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
