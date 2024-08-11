@@ -33,7 +33,6 @@ export class GalleryComponent implements OnInit {
         const groupedByColor: {
           [x: string]: { create_year: string; images: ImageObject[] };
         } = {};
-
         for (const image of response) {
           const year = new Date(image.created_at).getFullYear().toString();
           if (!groupedByColor[year]) {

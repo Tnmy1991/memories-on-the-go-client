@@ -5,10 +5,10 @@
     </button>
   </div>
   <div class="action-wrapper">
-    <!-- <div class="action">
-      <span class="material-symbols-outlined">settings</span>
-    </div> -->
     <div class="action">
+      <ng-container [formGroup]="uploaderForm">
+        <app-image-uploader></app-image-uploader>
+      </ng-container>
       <button type="button" class="action-button" (click)="logout()">
         <span class="material-symbols-outlined">logout</span>
       </button>

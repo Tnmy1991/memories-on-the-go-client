@@ -32,3 +32,8 @@ export interface ImageObject {
   filename: string;
   created_at: string;
 }
+
+export interface ImageUploader {
+  filename: string;
+  upload_url: string;
+}

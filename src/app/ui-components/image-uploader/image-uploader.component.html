@@ -1,0 +1,16 @@
+<ng-container [formGroup]="formGroup">
+  <button type="button" class="action-button" (click)="onClick()">
+    <span class="material-symbols-outlined">cloud_upload</span>
+  </button>
+  <input
+    #fileUpload
+    type="file"
+    multiple
+    id="imageField"
+    name="imageField"
+    [accept]="acceptedTypes"
+    formControlName="{{ imageField }}"
+    class="input_fileupload--hidden"
+    (change)="onFileSelected($event)"
+  />
+</ng-container>
