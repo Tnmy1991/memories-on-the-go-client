@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { ImageObject } from '../app.model';
 
 @Injectable({
@@ -13,8 +13,8 @@ export class ImagesService {
   constructor(private _httpClient: HttpClient) {}
 
   getAllImages(): Observable<ImageObject[]> {
-    return this._httpClient.get<ImageObject[]>(
-      `${this.IMAGE_ENDPOINT}/listing`
-    );
+    return this._httpClient
+      .get<ImageObject[]>(`${this.IMAGE_ENDPOINT}/listing`)
+      .pipe(shareReplay(1));
   }
 }

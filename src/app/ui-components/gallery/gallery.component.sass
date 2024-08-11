@@ -1,6 +1,13 @@
+:host::ng-deep
+  .card
+    top: 0 !important
+    width: 100% !important
+    height: 100% !important
+
 .image-container
-  height: calc(100vh - 16px)
-  width: calc(100vw - 85px)
+  height: calc(100vh - 18px)
+  width: calc(100vw - 96px)
+  padding: 4px 8px 0
   position: absolute
   overflow: hidden
   overflow-y: auto
@@ -17,6 +24,8 @@
 .liner
   display: flex
   text-align: left
+  font-size: 16px
+  font-weight: 500
   align-items: flex-start
 
   &:after
@@ -31,8 +40,59 @@
     margin-left: 10px
 
 .thumbnail-list
+  gap: 12px
   display: flex
-  flex-direction: row
   flex-wrap: wrap
   list-style: none
-  gap: 8px
+  flex-direction: row
+  padding-inline-start: 16px
+
+.viewer-container
+  padding: 8px
+  width: calc(100% - 16px)
+  height: calc(100% - 16px)
+
+  .back
+    z-index: 1
+    cursor: pointer
+    margin-left: 65px
+    position: absolute
+
+  .prev-button-wrapper
+    top: 0
+    left: 0
+    width: 60px
+    height: 100%
+    color: #ffffff
+    position: absolute
+    align-content: center
+    background: rgb(0,0,0)
+    border-radius: 10px 0px 0px 10px
+    background: linear-gradient(90deg, rgba(0,0,0,0.26934523809523814) 0%, rgba(255,255,255,1) 79%)
+
+    span
+      cursor: pointer
+      margin-left: 14px
+
+  .next-button-wrapper
+    top: 0
+    right: 0
+    width: 60px
+    height: 100%
+    color: #ffffff
+    position: absolute
+    align-content: center
+    background: rgb(0,0,0)
+    border-radius: 0 10px 10px
+    background: linear-gradient(270deg, rgba(0,0,0,0.26934523809523814) 0%, rgba(255,255,255,1) 79%)
+    
+    span
+      cursor: pointer
+      margin-left: 28px
+      
+
+  .fullSize
+    width: 98%
+    height: 100%
+    object-fit: contain
+  

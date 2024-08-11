@@ -1,12 +1,40 @@
 <div class="image-container custom-scrollbar">
-  @for (imageGroup of imageGroupArray; track $index) {
+  @for (imageGroup of imagesGroupArray; track $index) {
   <p class="liner">{{ imageGroup.create_year }}</p>
   <ul class="thumbnail-list">
     @for (image of imageGroup.images; track $index) {
-    <li>
+    <li (click)="imageViewer(image)">
       <app-image-viewer [image]="image"></app-image-viewer>
     </li>
     }
   </ul>
   }
 </div>
+@if(isImageViewerActive) {
+<app-dialog-box>
+  <div class="viewer-container">
+    <span class="back material-symbols-outlined" (click)="closeViewer()">
+      arrow_back
+    </span>
+    @if (prevImageIndex > -1) {
+    <div class="prev-button-wrapper">
+      <span class="material-symbols-outlined" (click)="switchImage('PREV')">
+        arrow_back_ios
+      </span>
+    </div>
+    }
+    <img
+      class="fullSize"
+      [src]="viewerObject.original_image"
+      [alt]="viewerObject.s3_key"
+    />
+    @if (nextImageIndex > -1) {
+    <div class="next-button-wrapper">
+      <span class="material-symbols-outlined" (click)="switchImage('NEXT')">
+        arrow_forward_ios
+      </span>
+    </div>
+    }
+  </div>
+</app-dialog-box>
+}
