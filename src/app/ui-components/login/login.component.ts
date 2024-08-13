@@ -4,8 +4,8 @@ import {
   FormControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { catchError } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { catchError, Subject, takeUntil } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthorizeService, UsersService } from '../../services';
 import { ExtendedFieldComponent } from '../extended-field/extended-field.component';
 
@@ -16,9 +16,11 @@ import { ExtendedFieldComponent } from '../extended-field/extended-field.compone
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   isLogging = false;
   loginForm!: FormGroup;
+
+  private readonly unsubscribe$: Subject<void> = new Subject();
 
   constructor(
     private _userService: UsersService,
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
       this._userService
         .login(this.loginForm.value)
         .pipe(
+          takeUntil(this.unsubscribe$),
           catchError((error) => {
             this.loginForm
               .get(error.error.field)
@@ -58,5 +61,10 @@ export class LoginComponent implements OnInit {
           location.reload();
         });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

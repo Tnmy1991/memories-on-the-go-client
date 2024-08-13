@@ -4,8 +4,8 @@ import {
   FormControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { catchError } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { catchError, Subject, takeUntil } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthorizeService, UsersService } from '../../services';
 import { ExtendedFieldComponent } from '../extended-field/extended-field.component';
 import { LookupValidator } from '../lookup.validator';
@@ -18,10 +18,11 @@ import { ConfirmPasswordValidator } from '../password.validator';
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.sass',
 })
-export class CreateAccountComponent implements OnInit {
+export class CreateAccountComponent implements OnInit, OnDestroy {
   isReqesting = false;
   createAccoutnForm!: FormGroup;
 
+  private readonly unsubscribe$: Subject<void> = new Subject();
   private readonly StrongPasswordRegx: RegExp =
     /^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{6,}$/;
 
@@ -66,6 +67,7 @@ export class CreateAccountComponent implements OnInit {
       this._userService
         .createAccount(this.createAccoutnForm.value)
         .pipe(
+          takeUntil(this.unsubscribe$),
           catchError((error) => {
             this.isReqesting = false;
 
@@ -77,5 +79,10 @@ export class CreateAccountComponent implements OnInit {
           location.reload();
         });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

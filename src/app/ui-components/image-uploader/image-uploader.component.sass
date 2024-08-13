@@ -1,2 +1,40 @@
 .input_fileupload--hidden
   display: none
+
+.uploader-dialog
+  bottom: 5%
+  left: 60px
+  z-index: 10
+  width: 240px
+  padding: 8px
+  min-height: 32px
+  background: #fff
+  position: absolute
+  border-radius: 10px
+  box-shadow: rgba(2, 2, 2, 0.31) 0px 1px 14px
+
+  ul
+    margin: 0
+    color: #000
+    list-style-type: none
+    padding-inline-start: 0px
+
+    li
+      font-size: 16px
+      font-weight: 600
+      line-height: 24px
+      padding: 4px 0px 4px
+
+      span
+        float: right
+        display: inline-block
+        vertical-align: middle
+
+        &.success
+          color: #198754
+
+        &.error
+          color: #dc3545
+
+        &.pending
+          color: #ffc107

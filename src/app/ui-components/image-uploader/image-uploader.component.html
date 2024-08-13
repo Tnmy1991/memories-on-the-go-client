@@ -14,3 +14,21 @@
     (change)="onFileSelected($event)"
   />
 </ng-container>
+@if (isUploading) {
+<div class="uploader-dialog">
+  <ul>
+    @for (file of imageQueue; track $index) {
+    <li>
+      {{ file.filename }}
+      @if (file.status === "SUCCESS") {
+      <span class="material-symbols-outlined success">check_circle</span>
+      } @else if (file.status === "ERROR") {
+      <span class="material-symbols-outlined error">cancel</span>
+      } @else if (file.status === "PENDING") {
+      <span class="material-symbols-outlined pending">pending</span>
+      }
+    </li>
+    }
+  </ul>
+</div>
+}
