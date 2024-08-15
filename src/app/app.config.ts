@@ -1,5 +1,11 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
+  HttpBackend,
+  HttpClient,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import {
+  APP_INITIALIZER,
   ApplicationConfig,
   importProvidersFrom,
   provideZoneChangeDetection,
@@ -7,9 +13,14 @@ import {
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ApiInterceptor } from './middleware/api.interceptor';
+import { ConfigService } from './services';
 
 export function tokenGetter(): string {
   return sessionStorage.getItem('bearer_token') ?? '';
+}
+
+export function initializeApp() {
+  return () => ConfigService.initConfigService();
 }
 
 export const appConfig: ApplicationConfig = {
@@ -24,5 +35,10 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      multi: true,
+    },
   ],
 };

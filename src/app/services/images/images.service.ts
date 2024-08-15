@@ -2,31 +2,34 @@ import { Injectable } from '@angular/core';
 import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { GetS3Object, ImageObject, ImageUploader } from '../app.model';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImagesService {
-  private readonly IMAGE_ENDPOINT =
-    'https://kx2igcenr7.execute-api.us-east-1.amazonaws.com/prod/images';
+  private IMAGE_ENDPOINT = '';
   private _httpWithoutInterceptor: HttpClient;
 
   constructor(
+    private _configService: ConfigService,
     private _httpBackend: HttpBackend,
     private _httpClient: HttpClient
   ) {
+    this.IMAGE_ENDPOINT =
+      this._configService.getConfigService('IMAGE_ENDPOINT');
     this._httpWithoutInterceptor = new HttpClient(_httpBackend);
   }
 
   getAllImages(): Observable<ImageObject[]> {
     return this._httpClient
-      .get<{ images: ImageObject[] }>(`${this.IMAGE_ENDPOINT}/listing`)
+      .get<{ images: ImageObject[] }>(`${this.IMAGE_ENDPOINT}images/listing`)
       .pipe(map((response) => response?.images));
   }
 
   getSignedUrl(fileName: string): Observable<ImageUploader> {
     return this._httpClient.post<ImageUploader>(
-      `${this.IMAGE_ENDPOINT}/upload`,
+      `${this.IMAGE_ENDPOINT}images/upload`,
       { image: fileName }
     );
   }
@@ -36,7 +39,7 @@ export class ImagesService {
     s3_key_thumbnail: string;
   }): Observable<GetS3Object> {
     return this._httpClient.post<GetS3Object>(
-      `${this.IMAGE_ENDPOINT}/s3-presigned`,
+      `${this.IMAGE_ENDPOINT}images/s3-presigned`,
       body
     );
   }

@@ -7,36 +7,40 @@ import {
   LoginPayload,
   LoginResponse,
 } from '../app.model';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
-  private readonly USER_ENDPOINT =
-    'https://jl2j5nkkda.execute-api.us-east-1.amazonaws.com/prod/users';
+  private USER_ENDPOINT = '';
   private httpWithoutInterceptor: HttpClient;
 
-  constructor(private _httpBackend: HttpBackend) {
+  constructor(
+    private _httpBackend: HttpBackend,
+    private _configService: ConfigService
+  ) {
+    this.USER_ENDPOINT = this._configService.getConfigService('USER_ENDPOINT');
     this.httpWithoutInterceptor = new HttpClient(_httpBackend);
   }
 
   performLookup(body: LookupPayload): Observable<{ lookupFlag: boolean }> {
     return this.httpWithoutInterceptor.post<{ lookupFlag: boolean }>(
-      `${this.USER_ENDPOINT}/lookup`,
+      `${this.USER_ENDPOINT}users/lookup`,
       body
     );
   }
 
   createAccount(body: CreateAccountPayload): Observable<LoginResponse> {
     return this.httpWithoutInterceptor.post<LoginResponse>(
-      `${this.USER_ENDPOINT}/create-account`,
+      `${this.USER_ENDPOINT}users/create-account`,
       body
     );
   }
 
   login(body: LoginPayload): Observable<LoginResponse> {
     return this.httpWithoutInterceptor.post<LoginResponse>(
-      `${this.USER_ENDPOINT}/login`,
+      `${this.USER_ENDPOINT}users/login`,
       body
     );
   }

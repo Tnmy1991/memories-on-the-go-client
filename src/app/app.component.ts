@@ -7,9 +7,9 @@ import {
   ActionSidebarComponent,
   ExtendedFieldComponent,
 } from './ui-components';
+import { Subject, takeUntil } from 'rxjs';
 import { AuthorizeService } from './services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
