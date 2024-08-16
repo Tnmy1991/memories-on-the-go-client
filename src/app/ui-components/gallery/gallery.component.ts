@@ -18,42 +18,19 @@ export class GalleryComponent implements OnInit {
   isImageViewerActive = false;
   imagesGroupArray: { create_year: string; images: ImageObject[] }[] = [];
 
+  private _refreshTrigger = false;
   private _imagesArray: ImageObject[] = [];
   private readonly unsubscribe$: Subject<void> = new Subject();
 
   constructor(private _imageService: ImagesService) {}
 
   ngOnInit(): void {
-    this._imageService
-      .getAllImages()
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        catchError((error) => {
-          this._imagesArray = [];
-          this.imagesGroupArray = [];
-
-          throw error;
-        })
-      )
-      .subscribe((images) => {
-        const allS3Requests = images.map((image) => {
-          return this._imageService
-            .getS3Object({
-              s3_key: image.s3_key,
-              s3_key_thumbnail: image.s3_key_thumbnail,
-            })
-            .pipe(
-              map((s3PresignedUrls) => ({
-                ...image,
-                ...s3PresignedUrls,
-              }))
-            );
-        });
-
-        forkJoin(allS3Requests).subscribe((requestObservers) => {
-          this._imagesArray = [...requestObservers];
-          this._groupByCreatedYear();
-        });
+    this._getAllUploadedImages();
+    this._imageService.observeTrigger
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((trigger) => {
+        this._refreshTrigger = trigger;
+        if (trigger) this._getAllUploadedImages();
       });
   }
 
@@ -103,6 +80,55 @@ export class GalleryComponent implements OnInit {
 
   closeViewer(): void {
     this.isImageViewerActive = false;
+  }
+
+  private _getAllUploadedImages(): void {
+    this._imageService
+      .getAllImages()
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        catchError((error) => {
+          this._imagesArray = [];
+          this.imagesGroupArray = [];
+
+          throw error;
+        })
+      )
+      .subscribe((images) => {
+        this._getS3PresignedUrls(images);
+      });
+  }
+
+  private _getS3PresignedUrls(images: ImageObject[]): void {
+    if (this._refreshTrigger) {
+      const temp = images.filter(
+        ({ image_id: obj_1 }) =>
+          !this._imagesArray.some(({ image_id: obj_2 }) => obj_1 === obj_2)
+      );
+      images = [...temp];
+    }
+
+    const allS3Requests = images.map((image) => {
+      return this._imageService
+        .getS3Object({
+          s3_key: image.s3_key,
+          s3_key_thumbnail: image.s3_key_thumbnail,
+        })
+        .pipe(
+          map((s3PresignedUrls) => ({
+            ...image,
+            ...s3PresignedUrls,
+          }))
+        );
+    });
+
+    forkJoin(allS3Requests).subscribe((requestObservers) => {
+      this._imagesArray = this._refreshTrigger
+        ? [...this._imagesArray, ...requestObservers]
+        : [...requestObservers];
+      this._groupByCreatedYear();
+      this._imageService.initiateTrigger(false);
+    });
   }
 
   private _groupByCreatedYear(): void {

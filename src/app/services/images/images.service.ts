@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { GetS3Object, ImageObject, ImageUploader } from '../app.model';
 import { ConfigService } from '../config.service';
 
@@ -10,6 +10,11 @@ import { ConfigService } from '../config.service';
 export class ImagesService {
   private IMAGE_ENDPOINT = '';
   private _httpWithoutInterceptor: HttpClient;
+  private _triggerImageRefresh: BehaviorSubject<boolean> = new BehaviorSubject(
+    false
+  );
+
+  observeTrigger = this._triggerImageRefresh.asObservable();
 
   constructor(
     private _configService: ConfigService,
@@ -19,6 +24,10 @@ export class ImagesService {
     this.IMAGE_ENDPOINT =
       this._configService.getConfigService('IMAGE_ENDPOINT');
     this._httpWithoutInterceptor = new HttpClient(_httpBackend);
+  }
+
+  initiateTrigger(flag: boolean): void {
+    this._triggerImageRefresh.next(flag);
   }
 
   getAllImages(): Observable<ImageObject[]> {

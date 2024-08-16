@@ -48,6 +48,7 @@ export class ImageUploaderComponent implements OnInit, OnDestroy {
         if (value === this.imageQueue.length) {
           setTimeout(() => {
             this.isUploading = false;
+            this._imagesService.initiateTrigger(true);
           }, 2000);
         }
       }
